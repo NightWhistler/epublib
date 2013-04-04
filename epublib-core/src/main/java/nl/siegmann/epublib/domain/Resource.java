@@ -112,7 +112,7 @@ public class Resource implements Serializable {
 	 * @param href The location of the resource within the epub. Example: "cover.jpg".
 	 */
 	public Resource(InputStream in, String href) throws IOException {
-		this(null, IOUtil.toByteArray(in),  href, MediatypeService.determineMediaType(href));
+		this(null, IOUtil.toByteArray(in), href, MediatypeService.determineMediaType(href));
 	}
 
     /**
@@ -223,12 +223,16 @@ public class Resource implements Serializable {
 			
 			LOG.info("Initializing lazy resource " + fileName + "#" + this.href );
 			
-			InputStream in = getResourceStream();
-			byte[] readData = IOUtil.toByteArray(in, (int) this.cachedSize);
-			if ( readData == null ) {
-			    throw new IOException("Could not lazy-load data.");
-			} else {
-			    this.data = readData;
+			ZipInputStream in = new ZipInputStream(new FileInputStream(this.fileName));
+			
+			for(ZipEntry zipEntry = in.getNextEntry(); zipEntry != null; zipEntry = in.getNextEntry()) {
+				if(zipEntry.isDirectory()) {
+					continue;
+				}
+				
+				if ( zipEntry.getName().endsWith(this.href)) {
+					this.data = IOUtil.toByteArray(in);
+				}				
 			}
 			
 			in.close();
