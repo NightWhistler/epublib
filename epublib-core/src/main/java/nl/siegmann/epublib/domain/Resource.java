@@ -211,7 +211,7 @@ public class Resource implements Serializable {
 				}
 				
 				if ( zipEntry.getName().endsWith(this.href)) {
-					this.data = IOUtil.toByteArray(in);
+					this.data = IOUtil.toByteArray(in, (int) this.cachedSize);
 				}				
 			}
 			

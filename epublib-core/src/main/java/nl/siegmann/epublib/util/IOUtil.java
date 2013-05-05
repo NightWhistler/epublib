@@ -40,25 +40,30 @@ public class IOUtil {
 	}
 
     /**
-     * Reads data from the InputStream, into a byte[] of a given size.
-     *
-     * This tries to allocate a byte[] and then read the data into it.
-     * If the array can't be allocated, null is returned.
+     * Reads data from the InputStream, using the specified buffer size.
      *
      * This is meant for situations where memory is tight, since
-     * it is guaranteed to only allocate a single array.
+     * it prevents buffer expansion.
      *
      * @param stream the stream to read data from
      * @param size the size of the array to create
      * @return the array, or null
      * @throws IOException
      */
-    public static byte[] toByteArray( InputStream stream, int size ) throws IOException {
+    public static byte[] toByteArray( InputStream in, int size ) throws IOException {
 
         try {
-            byte[] array = new byte[size];
-            new DataInputStream(stream).readFully(array);
-            return array;
+            ByteArrayOutputStream result;
+
+            if ( size > 0 ) {
+                result = new ByteArrayOutputStream(size);
+            } else {
+                result = new ByteArrayOutputStream();
+            }
+
+            copy(in, result);
+            result.flush();
+            return result.toByteArray();
         } catch ( OutOfMemoryError error ) {
             //Return null so it gets loaded lazily.
             return null;
