@@ -1,13 +1,9 @@
 package nl.siegmann.epublib.domain;
 
-import java.io.ByteArrayInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.Serializable;
+import java.io.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+import java.util.zip.ZipInputStream;
 
 import nl.siegmann.epublib.Constants;
 import nl.siegmann.epublib.service.MediatypeService;
@@ -335,6 +331,15 @@ public class Resource implements Serializable {
 	public String getHref() {
 		return href;
 	}
+
+    /**
+     * Returns the full href, including path.
+     *
+     * @return
+     */
+    public String getOriginalHref() {
+        return originalHref;
+    }
 
 	/**
 	 * Sets the Resource's href.
