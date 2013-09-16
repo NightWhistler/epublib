@@ -1,3 +1,8 @@
+# epublib-pageturner
+This is a fork of epub-lib which contains some custom features used in PageTurner.
+
+Anything interesting in this fork also gets contributed back to the vanilla epublib, so you probably want to use that in your projects instead of this fork.
+
 # epublib
 Epublib is a java library for reading/writing/manipulating epub files.
 
