@@ -291,7 +291,29 @@ public class Resources implements Serializable {
 		Resource result = resources.get(href);
 		return result;
 	}
-	
+
+    /**
+     * Matches a Resource by only the last portion of the href (the filename)
+     * @param fileName
+     * @return
+     */
+    public Resource getByFileName( String href ) {
+
+        if (StringUtil.isBlank(href)) {
+            return null;
+        }
+        href = StringUtil.substringBefore(href, Constants.FRAGMENT_SEPARATOR_CHAR);
+        href = StringUtil.substringAfter( href, '/' );
+
+        for ( Resource res: getAll() ) {
+            if ( res.getHref().endsWith( href ) ) {
+                return res;
+            }
+        }
+
+        return null;
+    }
+
 	/**
 	 * Gets the first resource (random order) with the give mediatype.
 	 * 
